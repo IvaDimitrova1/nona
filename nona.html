@@ -1,0 +1,638 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1 Vocabulary Master - English & German</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .card-flip-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Top Header -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            
+            <!-- Logo / Title -->
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">Unit 1: Starting a Career</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">English ↔ German Vocabulary Trainer</p>
+                </div>
+            </div>
+
+            <!-- Global Controls (Filter, Direction, Dark Mode) -->
+            <div class="flex items-center flex-wrap gap-2">
+                <!-- Category Select -->
+                <select id="categoryFilter" onchange="filterCategory(this.value)" class="bg-slate-100 dark:bg-slate-700 text-xs sm:text-sm text-slate-700 dark:text-slate-200 border-none rounded-lg px-3 py-2 font-medium focus:ring-2 focus:ring-brand-500 outline-none">
+                    <option value="all">الجميع / All Sections</option>
+                    <option value="1.1">1.1 Our Practical Training</option>
+                    <option value="1.2">1.2 Working in a Canteen Kitchen</option>
+                    <option value="1.3">1.3 Working in a Hospital Ward</option>
+                </select>
+
+                <!-- Text Direction Toggle -->
+                <button onclick="toggleDirection()" class="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg text-slate-600 dark:text-slate-300 text-xs font-semibold flex items-center gap-1 transition" title="Toggle Text Direction">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span id="dir-label" class="hidden sm:inline">RTL</span>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg text-slate-600 dark:text-slate-300 transition" title="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- Mode Navigation Tabs -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+            <button onclick="switchMode('flashcards')" id="tab-flashcards" class="mode-tab flex items-center justify-center space-x-2 space-x-reverse py-3 px-4 rounded-xl font-bold text-sm transition shadow-sm bg-brand-600 text-white">
+                <i class="fa-solid fa-clone"></i>
+                <span>بطاقات (Flashcards)</span>
+            </button>
+            <button onclick="switchMode('matching')" id="tab-matching" class="mode-tab flex items-center justify-center space-x-2 space-x-reverse py-3 px-4 rounded-xl font-bold text-sm transition shadow-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-puzzle-piece text-brand-500"></i>
+                <span>توصيل (Matching)</span>
+            </button>
+            <button onclick="switchMode('quiz')" id="tab-quiz" class="mode-tab flex items-center justify-center space-x-2 space-x-reverse py-3 px-4 rounded-xl font-bold text-sm transition shadow-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-circle-question text-brand-500"></i>
+                <span>اختبار (Quiz)</span>
+            </button>
+            <button onclick="switchMode('spelling')" id="tab-spelling" class="mode-tab flex items-center justify-center space-x-2 space-x-reverse py-3 px-4 rounded-xl font-bold text-sm transition shadow-sm bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-pen-to-square text-brand-500"></i>
+                <span>إملاء (Spelling)</span>
+            </button>
+        </div>
+
+        <!-- MODE 1: FLASHCARDS -->
+        <div id="mode-flashcards" class="mode-content">
+            <div class="max-w-lg mx-auto">
+                <!-- Info Bar -->
+                <div class="flex justify-between items-center mb-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    <span id="fc-progress">Card 1 of 31</span>
+                    <span id="fc-category" class="bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded-md">1.1</span>
+                </div>
+
+                <!-- Card View -->
+                <div class="perspective-1000 w-full h-80 cursor-pointer mb-6" onclick="flipFlashcard()">
+                    <div id="fc-inner" class="card-flip-inner transform-style-3d relative w-full h-full rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl">
+                        
+                        <!-- Front Face (English) -->
+                        <div class="backface-hidden absolute inset-0 flex flex-col justify-center items-center p-6 text-center">
+                            <span class="text-xs font-extrabold uppercase tracking-widest text-brand-500 mb-2">English</span>
+                            <h2 id="fc-en" class="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white mb-2">(to) attend</h2>
+                            <p id="fc-desc" class="text-sm text-slate-500 dark:text-slate-400 italic mb-4 max-w-xs">to go</p>
+                            
+                            <button onclick="event.stopPropagation(); speakCurrentWord();" class="w-10 h-10 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center hover:scale-110 transition">
+                                <i class="fa-solid fa-volume-high text-lg"></i>
+                            </button>
+                            <span class="absolute bottom-4 text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                                <i class="fa-solid fa-rotate"></i> Click to flip for German
+                            </span>
+                        </div>
+
+                        <!-- Back Face (German) -->
+                        <div class="backface-hidden rotate-y-180 absolute inset-0 flex flex-col justify-center items-center p-6 text-center bg-slate-900 text-white rounded-2xl border border-slate-700">
+                            <span class="text-xs font-extrabold uppercase tracking-widest text-amber-400 mb-2">Deutsch</span>
+                            <h2 id="fc-de" class="text-2xl sm:text-3xl font-bold mb-3">etwas besuchen, an etwas teilnehmen</h2>
+                            <p id="fc-sub-en" class="text-xs text-slate-400 italic">(to) attend</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex items-center justify-between gap-3">
+                    <button onclick="prevFlashcard()" class="flex-1 py-3 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-slate-700 dark:text-slate-200 transition text-sm">
+                        <i class="fa-solid fa-chevron-right ml-1"></i> السابق
+                    </button>
+                    <button onclick="toggleCardBookmark()" id="fc-bookmark-btn" class="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 hover:text-amber-500 transition">
+                        <i class="fa-solid fa-star text-lg"></i>
+                    </button>
+                    <button onclick="nextFlashcard()" class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold transition text-sm">
+                        التالي <i class="fa-solid fa-chevron-left mr-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODE 2: MATCHING GAME -->
+        <div id="mode-matching" class="mode-content hidden">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-xl">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800 dark:text-white">لعبة التوصيل والمطابقة</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">طابق بين الكلمة بالإنجليزية ومعناها بالألمانية</p>
+                    </div>
+                    <div class="flex gap-3 text-xs font-bold">
+                        <div class="bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300">
+                            المحاولات: <span id="match-attempts" class="text-brand-600 dark:text-brand-400">0</span>
+                        </div>
+                        <div class="bg-emerald-50 dark:bg-emerald-950/50 px-3 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400">
+                            المطابقات: <span id="match-score">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid -->
+                <div id="matching-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <!-- Matching buttons dynamically rendered -->
+                </div>
+
+                <div class="text-center">
+                    <button onclick="initMatchingGame()" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow transition text-sm">
+                        <i class="fa-solid fa-rotate-right ml-1"></i> جولة جديدة
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODE 3: MULTIPLE CHOICE QUIZ -->
+        <div id="mode-quiz" class="mode-content hidden">
+            <div class="max-w-xl mx-auto bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-xl">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-100 dark:border-slate-700 pb-3">
+                    <span id="quiz-progress-text" class="text-xs font-bold text-slate-500 dark:text-slate-400">السؤال 1</span>
+                    <span id="quiz-score-text" class="text-xs font-bold text-brand-600 dark:text-brand-400">النقاط: 0</span>
+                </div>
+
+                <div class="text-center mb-6">
+                    <span class="text-xs font-bold text-brand-500 uppercase tracking-wider block mb-1">اختر المعنى الألماني الصحيح:</span>
+                    <h3 id="quiz-question-word" class="text-2xl font-extrabold text-slate-800 dark:text-white">vocational school</h3>
+                    <p id="quiz-question-desc" class="text-xs text-slate-400 italic mt-1">a school for learning a job</p>
+                </div>
+
+                <div id="quiz-options" class="grid grid-cols-1 gap-2.5 mb-6">
+                    <!-- Options buttons dynamically rendered -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden p-3 rounded-xl text-center font-bold text-sm mb-4"></div>
+
+                <div class="flex justify-end">
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition text-sm">
+                        السؤال التالي <i class="fa-solid fa-arrow-left mr-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODE 4: SPELLING PRACTICE -->
+        <div id="mode-spelling" class="mode-content hidden">
+            <div class="max-w-xl mx-auto bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-xl text-center">
+                <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-1">تمرين الإملاء والكتابة</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">اكتب الكلمة بالإنجليزية المطابقة للترجمة المعروضة</p>
+
+                <div class="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-5 mb-6 border border-slate-200/60 dark:border-slate-600/60">
+                    <span class="text-xs font-bold text-brand-500 block mb-1">المعنى بالألمانية:</span>
+                    <h3 id="spelling-de-word" class="text-2xl font-extrabold text-slate-800 dark:text-white mb-1">Hauswirtschafter/in</h3>
+                    <p id="spelling-en-desc" class="text-xs text-slate-400 italic">someone who does domestic tasks in a household</p>
+                </div>
+
+                <form onsubmit="handleSpellingSubmit(event)" class="space-y-4">
+                    <div class="relative">
+                        <input type="text" id="spelling-input" dir="ltr" placeholder="Type English word..." autocomplete="off" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-center font-semibold text-lg">
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button type="submit" class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow transition text-sm">
+                            تحقق من الإجابة
+                        </button>
+                        <button type="button" onclick="showSpellingHint()" class="px-4 py-3 bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 font-bold rounded-xl transition text-sm hover:bg-amber-200">
+                            <i class="fa-solid fa-lightbulb"></i> تلميح
+                        </button>
+                    </div>
+                </form>
+
+                <div id="spelling-hint" class="hidden mt-3 p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 rounded-lg text-xs font-semibold dir-ltr"></div>
+                <div id="spelling-result" class="hidden mt-4 p-3 rounded-xl text-center font-bold text-sm"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 text-center text-xs text-slate-500 dark:text-slate-400">
+        <p>Unit 1 Vocabulary Trainer • Interactive English & German Learning</p>
+    </footer>
+
+    <!-- App Logic -->
+    <script>
+        // Vocabulary Database (All items extracted from image)
+        const vocabularyData = [
+            // 1.1 Our Practical Training
+            { section: "1.1", en: "(to) attend", de: "etwas besuchen, an etwas teilnehmen", desc: "to go" },
+            { section: "1.1", en: "vocational school", de: "Berufsbildende Schulen", desc: "a school for learning a job" },
+            { section: "1.1", en: "housekeeper", de: "Hauswirtschafter/in", desc: "someone who does domestic tasks in a household" },
+            { section: "1.1", en: "male nurse", de: "Krankenpfleger", desc: "someone who takes care of ill people" },
+            { section: "1.1", en: "geriatric nurse", de: "Altenpfleger/in", desc: "someone who takes care of old people" },
+            { section: "1.1", en: "old people's home", de: "Altersheim/Altenwohnheim", desc: "a place where old people live" },
+            { section: "1.1", en: "surgical ward", de: "chirurgische Station eines Krankenhauses", desc: "block forming a division of a hospital shared by patients who need a similar kind of care after an operation" },
+            { section: "1.1", en: "(to) last", de: "dauern", desc: "to take" },
+            { section: "1.1", en: "(to) feel insecure", de: "sich unsicher fühlen", desc: "not to know if you do things right" },
+            { section: "1.1", en: "(to) be confused", de: "verwirrt sein", desc: "unable to think with clarity" },
+            { section: "1.1", en: "(to) scream", de: "schreien", desc: "to cry loudly" },
+            { section: "1.1", en: "(to) be proud", de: "stolz sein", desc: "feeling self-respect" },
+            { section: "1.1", en: "menu", de: "Speiseplan", desc: "a list of food which you can choose" },
+            { section: "1.1", en: "practical training", de: "Praktikumsplatz", desc: "a place where you can go to learn about jobs" },
+            { section: "1.1", en: "(to) sigh", de: "seufzen", desc: "breathe deeply" },
+            { section: "1.1", en: "(to) look tired", de: "müde aussehen", desc: "to look exhausted" },
+
+            // 1.2 Working in a Canteen Kitchen
+            { section: "1.2", en: "tray", de: "Tablett", desc: "a box on which you can carry something, e.g. glasses, food" },
+            { section: "1.2", en: "dietician", de: "Diätassistent/in", desc: "a specialist in the study of nutrition" },
+            { section: "1.2", en: "(to) deliver", de: "liefern", desc: "bring something to a destiny" },
+            { section: "1.2", en: "food", de: "Nahrung / das Essen", desc: "things you can eat" },
+            { section: "1.2", en: "plate", de: "Teller", desc: "a dish on which food is served" },
+
+            // 1.3 Working in a Hospital Ward
+            { section: "1.3", en: "(to) stare into space", de: "Löcher in die Luft starren", desc: "" },
+            { section: "1.3", en: "(to) take care of s.o.", de: "sich um jemanden kümmern", desc: "to watch what somebody is doing" },
+            { section: "1.3", en: "(to) be off sick", de: "krankgeschrieben sein", desc: "to be unable to go to work because of an illness" },
+            { section: "1.3", en: "(to) give s.o. a hand", de: "helfen", desc: "to help somebody" },
+            { section: "1.3", en: "(to) be in charge of s.o.", de: "verantwortlich sein für jemanden", desc: "to be responsible for somebody" },
+            { section: "1.3", en: "(to) shadow", de: "hier: der Anleiterin folgen", desc: "to follow s.o. around" },
+            { section: "1.3", en: "shy", de: "schüchtern sein", desc: "lacking of self-confidence" },
+            { section: "1.3", en: "(to) promise", de: "versprechen", desc: "to tell that you will do something" },
+            { section: "1.3", en: "(to) be sad", de: "traurig sein", desc: "to feel unhappy" },
+            { section: "1.3", en: "theatre", de: "Operationssaal", desc: "a place where people have an operation" }
+        ];
+
+        // State Variables
+        let currentFilteredData = [...vocabularyData];
+        let currentMode = "flashcards";
+        let bookmarkedWords = new Set();
+
+        // Mode States
+        let fcIndex = 0;
+        let fcFlipped = false;
+
+        let matchSelected = [];
+        let matchAttempts = 0;
+        let matchScore = 0;
+
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizQuestions = [];
+
+        let spellingIndex = 0;
+
+        // Theme and Direction Handlers
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-moon';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        function toggleDirection() {
+            const html = document.documentElement;
+            const label = document.getElementById('dir-label');
+            if (html.getAttribute('dir') === 'rtl') {
+                html.setAttribute('dir', 'ltr');
+                label.innerText = 'LTR';
+            } else {
+                html.setAttribute('dir', 'rtl');
+                label.innerText = 'RTL';
+            }
+        }
+
+        function filterCategory(category) {
+            if (category === 'all') {
+                currentFilteredData = [...vocabularyData];
+            } else {
+                currentFilteredData = vocabularyData.filter(item => item.section === category);
+            }
+            
+            fcIndex = 0;
+            quizIndex = 0;
+            spellingIndex = 0;
+
+            if (currentMode === 'flashcards') renderFlashcard();
+            if (currentMode === 'matching') initMatchingGame();
+            if (currentMode === 'quiz') startQuiz();
+            if (currentMode === 'spelling') renderSpelling();
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.mode-tab').forEach(el => {
+                el.classList.remove('bg-brand-600', 'text-white');
+                el.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+            });
+
+            document.getElementById(`mode-${mode}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${mode}`);
+            activeTab.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+            activeTab.classList.add('bg-brand-600', 'text-white');
+
+            if (mode === 'flashcards') renderFlashcard();
+            if (mode === 'matching') initMatchingGame();
+            if (mode === 'quiz') startQuiz();
+            if (mode === 'spelling') renderSpelling();
+        }
+
+        // Text To Speech
+        function speakCurrentWord() {
+            if ('speechSynthesis' in window) {
+                const item = currentFilteredData[fcIndex];
+                if (!item) return;
+                const cleanWord = item.en.replace(/\(to\)\s*/g, '');
+                const utterance = new SpeechSynthesisUtterance(cleanWord);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        /* --- FLASHCARDS --- */
+        function renderFlashcard() {
+            if (currentFilteredData.length === 0) return;
+            const item = currentFilteredData[fcIndex];
+
+            document.getElementById('fc-progress').innerText = `Card ${fcIndex + 1} of ${currentFilteredData.length}`;
+            document.getElementById('fc-category').innerText = `Unit ${item.section}`;
+            document.getElementById('fc-en').innerText = item.en;
+            document.getElementById('fc-desc').innerText = item.desc || '';
+            document.getElementById('fc-de').innerText = item.de;
+            document.getElementById('fc-sub-en').innerText = item.en;
+
+            const bmBtn = document.getElementById('fc-bookmark-btn');
+            if (bookmarkedWords.has(item.en)) {
+                bmBtn.classList.add('text-amber-500');
+            } else {
+                bmBtn.classList.remove('text-amber-500');
+            }
+
+            document.getElementById('fc-inner').classList.remove('rotate-y-180');
+            fcFlipped = false;
+        }
+
+        function flipFlashcard() {
+            fcFlipped = !fcFlipped;
+            const card = document.getElementById('fc-inner');
+            if (fcFlipped) card.classList.add('rotate-y-180');
+            else card.classList.remove('rotate-y-180');
+        }
+
+        function nextFlashcard() {
+            fcIndex = (fcIndex + 1) % currentFilteredData.length;
+            renderFlashcard();
+        }
+
+        function prevFlashcard() {
+            fcIndex = (fcIndex - 1 + currentFilteredData.length) % currentFilteredData.length;
+            renderFlashcard();
+        }
+
+        function toggleCardBookmark() {
+            const item = currentFilteredData[fcIndex];
+            if (bookmarkedWords.has(item.en)) {
+                bookmarkedWords.delete(item.en);
+            } else {
+                bookmarkedWords.add(item.en);
+            }
+            renderFlashcard();
+        }
+
+        /* --- MATCHING GAME --- */
+        function initMatchingGame() {
+            const grid = document.getElementById('matching-grid');
+            grid.innerHTML = '';
+            matchSelected = [];
+            matchAttempts = 0;
+            matchScore = 0;
+            document.getElementById('match-attempts').innerText = '0';
+            document.getElementById('match-score').innerText = '0';
+
+            let count = Math.min(6, currentFilteredData.length);
+            let sample = [...currentFilteredData].sort(() => 0.5 - Math.random()).slice(0, count);
+
+            let cards = [];
+            sample.forEach((item, idx) => {
+                cards.push({ id: idx, text: item.en, type: 'en' });
+                cards.push({ id: idx, text: item.de, type: 'de' });
+            });
+
+            cards.sort(() => 0.5 - Math.random());
+
+            cards.forEach(card => {
+                const btn = document.createElement('button');
+                btn.className = 'matching-btn p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl font-semibold text-xs sm:text-sm text-center flex items-center justify-center min-h-[75px] hover:border-brand-500 transition';
+                btn.innerText = card.text;
+                btn.dataset.id = card.id;
+                btn.dataset.type = card.type;
+                btn.onclick = () => handleMatchClick(btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function handleMatchClick(btn) {
+            if (btn.classList.contains('matched') || matchSelected.includes(btn)) return;
+
+            btn.classList.add('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40');
+            matchSelected.push(btn);
+
+            if (matchSelected.length === 2) {
+                matchAttempts++;
+                document.getElementById('match-attempts').innerText = matchAttempts;
+
+                const [b1, b2] = matchSelected;
+                if (b1.dataset.id === b2.dataset.id && b1.dataset.type !== b2.dataset.type) {
+                    // Correct Match
+                    b1.className = 'p-3 bg-emerald-500 text-white rounded-xl font-semibold text-xs sm:text-sm text-center flex items-center justify-center min-h-[75px] matched';
+                    b2.className = 'p-3 bg-emerald-500 text-white rounded-xl font-semibold text-xs sm:text-sm text-center flex items-center justify-center min-h-[75px] matched';
+                    matchScore++;
+                    document.getElementById('match-score').innerText = matchScore;
+                    matchSelected = [];
+                } else {
+                    // Wrong Match
+                    b1.classList.add('bg-rose-100', 'dark:bg-rose-950/50', 'border-rose-500');
+                    b2.classList.add('bg-rose-100', 'dark:bg-rose-950/50', 'border-rose-500');
+                    setTimeout(() => {
+                        b1.classList.remove('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40', 'bg-rose-100', 'dark:bg-rose-950/50', 'border-rose-500');
+                        b2.classList.remove('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40', 'bg-rose-100', 'dark:bg-rose-950/50', 'border-rose-500');
+                        matchSelected = [];
+                    }, 700);
+                }
+            }
+        }
+
+        /* --- QUIZ MODE --- */
+        function startQuiz() {
+            quizIndex = 0;
+            quizScore = 0;
+            quizQuestions = [...currentFilteredData].sort(() => 0.5 - Math.random());
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (quizIndex >= quizQuestions.length) {
+                document.getElementById('quiz-options').innerHTML = '';
+                document.getElementById('quiz-question-word').innerText = '🎉 أكملت الاختبار!';
+                document.getElementById('quiz-question-desc').innerText = `النتيجة العامة: ${quizScore} / ${quizQuestions.length}`;
+                document.getElementById('quiz-feedback').className = 'p-3 rounded-xl text-center font-bold text-sm mb-4 bg-brand-100 dark:bg-brand-900/40 text-brand-800 dark:text-brand-300 block';
+                document.getElementById('quiz-feedback').innerText = `النسبة المئوية: ${Math.round((quizScore / quizQuestions.length) * 100)}%`;
+                document.getElementById('quiz-next-btn').innerText = 'إعادة الاختبار';
+                document.getElementById('quiz-next-btn').onclick = startQuiz;
+                document.getElementById('quiz-next-btn').classList.remove('hidden');
+                return;
+            }
+
+            const item = quizQuestions[quizIndex];
+            document.getElementById('quiz-progress-text').innerText = `السؤال ${quizIndex + 1} من ${quizQuestions.length}`;
+            document.getElementById('quiz-score-text').innerText = `النقاط: ${quizScore}`;
+            document.getElementById('quiz-question-word').innerText = item.en;
+            document.getElementById('quiz-question-desc').innerText = item.desc || '';
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            let distractors = vocabularyData.filter(v => v.de !== item.de).sort(() => 0.5 - Math.random()).slice(0, 3).map(v => v.de);
+            let options = [item.de, ...distractors].sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn p-3 bg-slate-50 dark:bg-slate-700/40 border border-slate-200 dark:border-slate-600 rounded-xl text-right font-medium text-sm hover:border-brand-500 transition';
+                btn.innerText = opt;
+                btn.onclick = () => selectQuizAnswer(btn, opt, item.de);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectQuizAnswer(btn, selected, correct) {
+            document.querySelectorAll('.quiz-opt-btn').forEach(b => b.disabled = true);
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+
+            if (selected === correct) {
+                btn.className = 'p-3 bg-emerald-500 text-white font-medium text-sm rounded-xl text-right';
+                feedback.className = 'p-3 rounded-xl text-center font-bold text-sm mb-4 bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 block';
+                feedback.innerText = 'إجابة صحيحة!';
+                quizScore++;
+            } else {
+                btn.className = 'p-3 bg-rose-500 text-white font-medium text-sm rounded-xl text-right';
+                feedback.className = 'p-3 rounded-xl text-center font-bold text-sm mb-4 bg-rose-100 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 block';
+                feedback.innerText = `خاطئة. الإجابة الصحيحة: ${correct}`;
+
+                document.querySelectorAll('.quiz-opt-btn').forEach(b => {
+                    if (b.innerText === correct) {
+                        b.className = 'p-3 bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-500 text-emerald-800 dark:text-emerald-300 font-medium text-sm rounded-xl text-right';
+                    }
+                });
+            }
+
+            document.getElementById('quiz-score-text').innerText = `النقاط: ${quizScore}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            quizIndex++;
+            renderQuizQuestion();
+        }
+
+        /* --- SPELLING MODE --- */
+        function renderSpelling() {
+            if (currentFilteredData.length === 0) return;
+            const item = currentFilteredData[spellingIndex];
+
+            document.getElementById('spelling-de-word').innerText = item.de;
+            document.getElementById('spelling-en-desc').innerText = item.desc || '';
+            document.getElementById('spelling-input').value = '';
+            document.getElementById('spelling-result').classList.add('hidden');
+            document.getElementById('spelling-hint').classList.add('hidden');
+        }
+
+        function handleSpellingSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('spelling-input').value.trim().toLowerCase();
+            const target = currentFilteredData[spellingIndex].en.toLowerCase();
+            const cleanTarget = target.replace(/\(to\)\s*/g, '').trim();
+
+            const res = document.getElementById('spelling-result');
+            res.classList.remove('hidden');
+
+            if (input === target || input === cleanTarget) {
+                res.className = 'mt-4 p-3 rounded-xl text-center font-bold text-sm bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 block';
+                res.innerText = 'أحسنت! كتابة صحيحة.';
+                setTimeout(() => {
+                    spellingIndex = (spellingIndex + 1) % currentFilteredData.length;
+                    renderSpelling();
+                }, 1000);
+            } else {
+                res.className = 'mt-4 p-3 rounded-xl text-center font-bold text-sm bg-rose-100 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 block';
+                res.innerText = `إجابة غير صحيحة. الكلمة الصحيحة: ${currentFilteredData[spellingIndex].en}`;
+            }
+        }
+
+        function showSpellingHint() {
+            const hint = document.getElementById('spelling-hint');
+            const target = currentFilteredData[spellingIndex].en;
+            hint.classList.remove('hidden');
+            hint.innerText = `Hint: ${target.substring(0, 3)}...`;
+        }
+
+        // Initialize Application
+        window.onload = function() {
+            renderFlashcard();
+        };
+    </script>
+</body>
+</html>
